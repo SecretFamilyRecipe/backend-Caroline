@@ -1,4 +1,3 @@
-const { where } = require('../data/db-config');
 const db = require('../data/db-config');
 
 module.exports = {
@@ -21,8 +20,14 @@ function findBy(filter) {
 }
 
 async function add(user) {
+    // eslint-disable-next-line no-useless-catch
     try {
         const [id] = await db('users').insert(user, 'id'); 
-        
+        return findById(id);
+    } catch (error) {
+        throw error;
     }
+}
+function findById(id) {
+    return db('users').where({ id }).first();
 }
