@@ -1,5 +1,5 @@
 const request = require('supertest')
-const server = require('../server')
+const server = require('./server.js')
 const db = require('../data/db-config')
 
 beforeAll(async () => {
@@ -18,7 +18,7 @@ it('sanity check', () => {
   expect(true).not.toBe(false)
 })
 
-describe('server.js', () => {
+describe('server', () => {
   it('is the correct testing environment', async () => {
     expect(process.env.NODE_ENV).toBe('testing')
   })
