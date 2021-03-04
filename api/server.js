@@ -4,7 +4,7 @@ const cors = require('cors');
 
 
 const authRouter = require('../api/auth/auth-router');
-const usersRouter = require('../users/users-router');
+const usersRouter = require('../users/users-model');
 
 const server = express();
 server.use(express.json());
