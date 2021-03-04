@@ -7,4 +7,9 @@ server.use(express.json())
 server.use(helmet())
 server.use(cors())
 
-module.exports = server
+server.use('/api/users')
+server.get('/api', (req, res) => {
+    res.json({ message: 'API UP AND RUNNING' });
+})
+
+    module.exports = server;
