@@ -2,14 +2,15 @@ const router = require('express').Router();
 
 const Users = require('./users-model');
 
-const restricted = require('../api/auth/middleware/restricted');
-
-router.get('/', restricted, (req, res) => {
-    Users.find()
-        .then(users => {
-            res.status(200).json({ users, jwt: req.jwt });
+router.post('/register', (req, res) => {
+    const { user } = req.body;
+    Users.registerUser(user)
+        .then(newUser => {
+        res.status(201).json(newUser)
         })
-        .catch(err => res.send(err));
-});
+        .catch(error => {
+        res.status(500).json({error:error.message})
+    })
+})
 
 module.exports = router; 
