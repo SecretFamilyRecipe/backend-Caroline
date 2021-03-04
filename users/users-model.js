@@ -5,7 +5,7 @@ module.exports = {
     find,
     findBy,
     findById,
-};
+;
 
 function find() {
     return db('users').select('id', 'username').orderBy('id');

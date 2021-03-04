@@ -4,7 +4,7 @@ const cors = require('cors');
 
 
 const authRouter = require('../api/auth/auth-router');
-const usersRouter = require('../users/users-model');
+const usersRouter = require('../users/users-router');
 
 const server = express();
 server.use(express.json());
@@ -13,4 +13,8 @@ server.use(cors());
 
 server.use('/api/auth', authRouter);
 server.use('/api/users', usersRouter);
+
+server.get('/', (req, res) => {
+    res.status(200).json({ api: 'Family Recipes' });
+});
 module.exports = server
