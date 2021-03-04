@@ -5,7 +5,7 @@ module.exports = {
     find,
     findBy,
     findById,
-;
+};
 
 function find() {
     return db('users').select('id', 'username').orderBy('id');
@@ -20,12 +20,12 @@ function findBy(filter) {
 }
 
 async function add(user) {
-    // eslint-disable-next-line no-useless-catch
-    try {
-        const [id] = await db('users').insert(user, 'id'); 
-        return findById(id);
-    } catch (error) {
-        throw error;
+    const [id] = await db('users')
+        .insert(user,'id');
+    return db('users').findById(id);
+    }  
+    catch (error) {
+    handleError(error)};
     }
 }
 function findById(id) {
