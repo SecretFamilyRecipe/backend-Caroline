@@ -1,76 +1,50 @@
-const bcryptjs = require("bcryptjs");
-const jwt = require("jsonwebtoken"); 
-
 const router = require("express").Router();
-const config = require("./config");
+const Users = require("../users/users-model.js");
+const restricted = require("./restricted.js"); 
+const jwt = require('jsonwebtoken');
 
-const Users = require('../../users/users-model');
-const { isValid } = require('../../users/users-helper');
 
-router.post("/register", (req, res) => {
-    const credentials = req.body;
+router.get("/users", restricted, (req, res) => {
+    Users.getAll()
+    .then(users => {
+        res.status(200).json(users)
+    })
+    .catch(err => {
+        res.status(401).json({ message: err.error })
+    })
+   
+});
 
-    if (isValid(credentials)) {
-        const rounds = process.env.BCRYPT_ROUNDS || 8;
+router.post("/login", async (req, res) => {
+    const {user_username, user_password } = req.body;
 
-        // hash the password
-        const hash = bcryptjs.hashSync(credentials.password, rounds);
+    try {
+       
+        const userRegister = await Users.findBy({ user_username });
 
-        credentials.password = hash;
+        const token = makeJwt(userRegister);
 
-        // save the user to the database
-        Users.add(credentials)
-            .then(user => {
-                res.status(201).json({ data: user });
-            })
-            .catch(error => {
-                console.log("ERROR:", error)
-                res.status(500).json({ message: error.message });
-            });
-    } else {
-        res.status(400).json({
-            message: "please provide username and password",
-        });
+        res.status(200).json({ userRegister, token })
+        
+    } catch (err) {
+        res.status(500).json(err.message)
     }
 });
 
-router.post("/login", (req, res) => {
-    const { user_username, user_password } = req.body;
-
-    if (isValid(req.body)) {
-        Users.findBy({ user_username })
-            .then(([user]) => {
-                // compare the password stored in the database
-                if (user && bcryptjs.compareSync(user_password, user.user_password)) {
-                    const token = getJwt(user);
-
-                    res.status(200).json({ message: "Family Recipes api", token });
-                } else {
-                    res.status(401).json({ message: "Invalid credentials" });
-                }
-            })
-            .catch(error => {
-                res.status(500).json({ message: error.message });
-            });
-    } else {
-        res.status(400).json({
-            message: "please provide username and password",
-        });
-    }
-});
-
-function getJwt(user) {
+function makeJwt(user) {
     const payload = {
         subject: user.user_id,
         username: user.user_username,
-        role:user.user_role
+        role: user.user_role
     };
 
-    const jwtOptions = {
-        expiresIn: "8h",
-    };
+    const secret = process.env.JWT_SECRET 
 
-    return jwt.sign(payload, config.jwtSecret, jwtOptions);
+    const options = {
+        expiresIn: "1h"
+    }
+
+    return jwt.sign(payload, secret, options)
 }
 
 module.exports = router;
