@@ -12,6 +12,7 @@ server.use(cors())
 
 server.use('/api/users', usersRouter);
 server.use('/api/auth', authRouter);
+server.use()
 server.get('/api', (req, res) => {
     res.json({ message: 'API UP AND RUNNING' });
 })
