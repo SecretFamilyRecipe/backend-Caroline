@@ -1,5 +1,5 @@
 {
-  "name": "build-week-scaffolding-node",
+  "name": "bw-backend",
   "version": "1.0.0",
   "scripts": {
     "start": "node index.js",
