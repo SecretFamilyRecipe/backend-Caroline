@@ -4,8 +4,8 @@ const jwt = require("jsonwebtoken");
 const router = require("express").Router();
 const config = require("./config");
 
-const Users = require('../../users/users-router');
-const { isValid } = require();
+const Users = require('../../users/users-model');
+const { isValid } = require('../../users/users-helper');
 
 router.post("/register", (req, res) => {
     const credentials = req.body;
@@ -35,13 +35,13 @@ router.post("/register", (req, res) => {
 });
 
 router.post("/login", (req, res) => {
-    const { username, password } = req.body;
+    const { user_username, user_password } = req.body;
 
     if (isValid(req.body)) {
-        Users.findBy({ username })
+        Users.findBy({ user_username })
             .then(([user]) => {
                 // compare the password stored in the database
-                if (user && bcryptjs.compareSync(password, user.password)) {
+                if (user && bcryptjs.compareSync(user_password, user.user_password)) {
                     const token = getJwt(user);
 
                     res.status(200).json({ message: "Family Recipes api", token });
@@ -61,8 +61,9 @@ router.post("/login", (req, res) => {
 
 function getJwt(user) {
     const payload = {
-        userId: user.id,
-        username: user.username,
+        subject: user.user_id,
+        username: user.user_username,
+        role:user.user_role
     };
 
     const jwtOptions = {

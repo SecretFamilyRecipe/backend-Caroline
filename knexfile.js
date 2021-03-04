@@ -1,5 +1,5 @@
 const pg = require('pg');
-const localConnection = 'postgresql://localhost/family-recipes-bw';
+const localConnection = 'postgresql-triangular-99220 --app family-recipes-bw';
 
 let connection
 

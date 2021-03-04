@@ -7,18 +7,17 @@
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
     "seed": "knex seed:run",
-    "migrateh": "heroku run knex migrate:latest -a family-recipes-bw",
-    "rollbackh": "heroku run knex migrate:rollback -a family-recipes-bw",
-    "databaseh": "heroku pg:psql postgresql-triangular-99220 --app family-recipes-bw",
-    "seedh": "heroku run knex seed:run -a family-recipes-bw",
+    "migrateh": "heroku run knex migrate:latest -a postgresql-triangular-99220 --app family-recipes-bw",
+    "rollbackh": "heroku run knex migrate:rollback -a postgresql-triangular-99220 --app family-recipes-bw",
+    "databaseh": "heroku pg:psql -a postgresql-triangular-99220 --app family-recipes-bw",
+    "seedh": "heroku run knex seed:run -a postgresql-triangular-99220 --app family-recipes-bw",
     "test": "cross-env NODE_ENV=testing jest --watchAll --verbose --runInBand",
     "deploy": "git push heroku main"
   },
   "engines": {
-        "node": "14.15.4",
-        "npm": "6.14.11"
-      },
-  
+    "node": "14.15.4",
+    "npm": "6.14.11"
+  },
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -34,7 +33,6 @@
   },
   "devDependencies": {
     "@types/jest": "=26.0.20",
-    
     "eslint": "=7.20.0",
     "jest": "=26.6.3",
     "nodemon": "=2.0.7",
