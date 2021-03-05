@@ -1,16 +1,19 @@
+const bcryptjs = require("bcryptjs");
 const router = require('express').Router();
 
-const Users = require('./users-model');
+ 
+const Users = require("./users-model.js");
 
-router.post('/register', (req, res) => {
-    const { user } = req.body;
-    Users.registerUser(user)
-        .then(newUser => {
-        res.status(201).json(newUser)
+router.get('/', (req, res) => {
+    Users.find()
+        .then(users => {
+            res.status(200).json(users);
         })
         .catch(error => {
-        res.status(500).json({error:error.message})
-    })
-})
+            res.status(500).json({ error: error.message });
+        });
+    }); 
 
-module.exports = router; 
+
+module.exports = router 
+

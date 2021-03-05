@@ -1,20 +1,30 @@
 const db = require('../api/data/db-config');
 
 module.exports = {
-    registerUser,
-    getAll,
+    add,
+    find,
     findBy,
     findById,
 };
 
-function getAll() {
-    return db('users').orderBy('user_id');
+function find() {
+    return db('users').select('id', 'username').orderBy('id');       
 }
 
 function findBy(filter) {
-    return db('users').where(filter).orderBy('user_id').first();
-
+    return db('users').where(filter).orderBy('id');
 }
+
+
+async function add(user) {
+    try {
+        const [id] = await db('users').insert(user, 'id');
+
+        return findById(id);
+    } catch (error) {
+        throw error;
+    }
+    }
 
 async function registerUser(user) {
     try {
